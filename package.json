@@ -1,0 +1,47 @@
+{
+  "name": "gittomd",
+  "version": "1.1.0",
+  "description": "Your entire GitHub repo, intelligently packaged into a single Markdown file via CLI.",
+  "author": "a3ldi <me@a3ldi.online>",
+  "license": "MIT",
+  "homepage": "https://github.com/OpenSpace-Dev/gittomd",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenSpace-Dev/gittomd.git"
+  },
+  "keywords": [
+    "cli",
+    "github",
+    "markdown",
+    "llm",
+    "codegen",
+    "automation"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "dist/cli.js",
+  "bin": {
+    "gittomd": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/cli.ts",
+    "start": "node dist/cli.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "ora": "^8.0.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/yargs": "^17.0.32",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
