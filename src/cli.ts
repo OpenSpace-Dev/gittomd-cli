@@ -18,23 +18,38 @@ import { generateMarkdown } from "./markdown";
 async function main() {
   const argv = await yargs(hideBin(process.argv))
     .scriptName("gittomd")
-    .usage("$0 <repo> [options]")
-    .positional("repo", {
-      describe: "GitHub repository URL or 'owner/repo' string",
-      type: "string",
+    .usage("Usage: $0 <repo> [options]")
+    .command("$0 <repo>", "Convert GitHub repository to Markdown", (yargs) => {
+      return yargs
+        .positional("repo", {
+          describe: "GitHub repository URL or 'owner/repo' string",
+          type: "string",
+          demandOption: true,
+        });
     })
-    .option("o", {
-      alias: "output",
+    .option("output", {
+      alias: "o",
       type: "string",
       description: "Output file path. If not provided, prints to stdout.",
     })
+    .example("$0 microsoft/typescript", "Convert TypeScript repo to Markdown")
+    .example("$0 https://github.com/microsoft/typescript -o output.md", "Save to file")
     .help()
     .alias("h", "help")
+    .version()
+    .alias("v", "version")
+    .strict()
+    .demandCommand(1, "Please specify a repository")
     .parse();
-  
-    console.log(argv);
 
-  const repoIdentifier = argv._[0] as string;
+  const repoIdentifier = argv.repo as string;
+  const outputPath = argv.output as string | undefined;
+
+  console.log(chalk.gray(`Repository: ${repoIdentifier}`));
+  if (outputPath) {
+    console.log(chalk.gray(`Output: ${outputPath}`));
+  }
+
   const repoInfo = parseGitHubUrl(repoIdentifier);
 
   if (!repoInfo) {
@@ -56,9 +71,9 @@ async function main() {
 
     spinner.succeed(chalk.green("Markdown generated successfully!"));
 
-    if (argv.output) {
-      await writeFile(argv.output as string, markdownContent);
-      console.log(chalk.green(`\n✅ Output saved to ${argv.output}`));
+    if (outputPath) {
+      await writeFile(outputPath, markdownContent);
+      console.log(chalk.green(`\n✅ Output saved to ${outputPath}`));
     } else {
       console.log("\n--- Generated Markdown ---\n");
       console.log(markdownContent);
