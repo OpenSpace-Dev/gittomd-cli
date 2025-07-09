@@ -33,11 +33,20 @@ async function main() {
       type: "string",
       description: "Output file path. If not provided, prints to stdout.",
     })
+    .demandCommand(1, "You must provide a repository argument.")
     .help()
     .alias("h", "help")
     .parse();
 
   const repoIdentifier = argv.repo as string;
+  
+  // Add safety check
+  if (!repoIdentifier) {
+    console.error(chalk.red("Error: Repository argument is required."));
+    console.error(chalk.yellow("Usage: gittomd <repo> [-o output.md]"));
+    process.exit(1);
+  }
+
   const repoInfo = parseGitHubUrl(repoIdentifier);
 
   if (!repoInfo) {
@@ -75,7 +84,6 @@ async function main() {
     }
     process.exit(1);
   } finally {
-    // 4. Очистка
     if (tempDir) {
       await cleanup(tempDir);
     }

@@ -1,6 +1,6 @@
 {
   "name": "gittomd",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Your entire GitHub repo, intelligently packaged into a single Markdown file via CLI.",
   "author": "a3ldi <me@a3ldi.online>",
   "license": "MIT",
