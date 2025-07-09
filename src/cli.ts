@@ -17,36 +17,24 @@ import { generateMarkdown } from "./markdown";
  */
 async function main() {
   const argv = await yargs(hideBin(process.argv))
-    .command(
-      "gittomd <repo>",
-      "Convert a GitHub repository into a single Markdown file.",
-      (yargs) => {
-        return yargs.positional("repo", {
-          describe: "GitHub repository URL or 'owner/repo' string",
-          type: "string",
-          demandOption: true,
-        });
-      }
-    )
+    .scriptName("gittomd")
+    .usage("$0 <repo> [options]")
+    .positional("repo", {
+      describe: "GitHub repository URL or 'owner/repo' string",
+      type: "string",
+    })
     .option("o", {
       alias: "output",
       type: "string",
       description: "Output file path. If not provided, prints to stdout.",
     })
-    .demandCommand(1, "You must provide a repository argument.")
     .help()
     .alias("h", "help")
     .parse();
-
-  const repoIdentifier = argv.repo as string;
   
-  // Add safety check
-  if (!repoIdentifier) {
-    console.error(chalk.red("Error: Repository argument is required."));
-    console.error(chalk.yellow("Usage: gittomd <repo> [-o output.md]"));
-    process.exit(1);
-  }
+    console.log(argv);
 
+  const repoIdentifier = argv._[0] as string;
   const repoInfo = parseGitHubUrl(repoIdentifier);
 
   if (!repoInfo) {
